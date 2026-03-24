@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotéis Ultra-Premium NYC — Wanderlust Turismo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#0f0f1a;color:#e0e0e0;line-height:1.6}
+a{color:#c9a84c;text-decoration:none}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0f0f1a 0%,#1a1a2e 100%);padding:30px 20px;text-align:center;border-bottom:2px solid #c9a84c}
+.header .logo{font-family:'Georgia',serif;font-size:28px;color:#c9a84c;letter-spacing:3px;font-style:italic}
+.header h1{font-size:22px;color:#fff;margin-top:10px;font-weight:300;letter-spacing:1px}
+.header .subtitle{color:#999;font-size:13px;margin-top:8px}
+.header .dates{display:inline-block;background:#c9a84c;color:#0f0f1a;padding:6px 18px;border-radius:20px;font-weight:700;font-size:13px;margin-top:12px}
+
+/* NAV FAB */
+.fab-nav{position:fixed;bottom:20px;right:20px;z-index:1000;display:flex;flex-direction:column;gap:8px}
+.fab-btn{width:44px;height:44px;border-radius:50%;background:#c9a84c;color:#0f0f1a;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,.4);transition:.3s}
+.fab-btn:hover{transform:scale(1.1);background:#d4b85c}
+
+/* HOTEL SECTION */
+.hotel-section{max-width:900px;margin:30px auto;padding:0 15px}
+.hotel-card{background:#1a1a2e;border-radius:16px;overflow:hidden;margin-bottom:40px;border:1px solid #2a2a3e;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.hotel-header{padding:25px 20px;text-align:center}
+.hotel-name{font-size:24px;color:#c9a84c;font-family:'Georgia',serif;margin-bottom:4px}
+.hotel-location{color:#999;font-size:14px;margin-bottom:8px}
+.hotel-rating{display:inline-block;background:#c9a84c;color:#0f0f1a;padding:3px 12px;border-radius:12px;font-size:12px;font-weight:700}
+
+/* CAROUSEL */
+.carousel{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#111}
+.carousel img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;opacity:0;transition:opacity .6s ease}
+.carousel img.active{opacity:1}
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;z-index:5;transition:.3s}
+.carousel-btn:hover{background:rgba(201,168,76,.8)}
+.carousel-btn.prev{left:10px}
+.carousel-btn.next{right:10px}
+.carousel-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.carousel-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:.3s}
+.carousel-dot.active{background:#c9a84c;transform:scale(1.3)}
+
+/* ROOM CARDS */
+.rooms-container{padding:20px}
+.rooms-title{text-align:center;color:#c9a84c;font-size:16px;margin-bottom:15px;text-transform:uppercase;letter-spacing:2px}
+.room-card{background:#12121f;border-radius:12px;padding:18px;margin-bottom:12px;border:1px solid #2a2a3e;transition:.3s}
+.room-card:hover{border-color:#c9a84c;transform:translateY(-2px)}
+.room-card.highlight{border-color:#c9a84c;background:linear-gradient(135deg,#1a1a2e,#22223a)}
+.room-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
+.room-label.eco{color:#4caf50}
+.room-label.mid{color:#2196f3}
+.room-label.top{color:#ff5722}
+.room-name{font-size:17px;color:#fff;font-weight:700;margin-bottom:4px}
+.room-size{color:#c9a84c;font-size:13px;margin-bottom:6px}
+.room-desc{color:#aaa;font-size:13px;margin-bottom:10px;line-height:1.5}
+.room-prices{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.price-usd{color:#90caf9;font-size:14px;font-weight:600}
+.price-brl{color:#fff;font-size:18px;font-weight:700}
+.price-brl span{color:#c9a84c}
+
+/* SUMMARY TABLE */
+.summary-section{max-width:900px;margin:20px auto 40px;padding:0 15px}
+.summary-card{background:#1a1a2e;border-radius:16px;overflow:hidden;border:1px solid #2a2a3e}
+.summary-title{background:linear-gradient(135deg,#c9a84c,#a8893a);color:#0f0f1a;padding:18px;text-align:center;font-size:18px;font-weight:700}
+.summary-table{width:100%;border-collapse:collapse}
+.summary-table th{background:#12121f;color:#c9a84c;padding:12px 10px;font-size:12px;text-transform:uppercase;letter-spacing:1px;text-align:left}
+.summary-table td{padding:12px 10px;border-bottom:1px solid #2a2a3e;font-size:13px}
+.summary-table tr:hover{background:#22223a}
+.summary-table .hotel-col{color:#fff;font-weight:600}
+.summary-table .price-col{color:#c9a84c;font-weight:700;font-size:15px;text-align:right}
+.summary-table .usd-col{color:#90caf9;text-align:right;font-size:12px}
+
+/* DISCLAIMER */
+.disclaimer{max-width:900px;margin:0 auto 30px;padding:0 15px;text-align:center;color:#666;font-size:11px;line-height:1.8}
+.footer{background:#0a0a14;padding:20px;text-align:center;border-top:1px solid #1a1a2e}
+.footer .brand{color:#c9a84c;font-family:'Georgia',serif;font-size:16px;font-style:italic}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:2000;align-items:center;justify-content:center}
+.lightbox.active{display:flex}
+.lightbox img{max-width:95%;max-height:90vh;object-fit:contain;border-radius:8px}
+.lightbox-close{position:absolute;top:15px;right:20px;color:#fff;font-size:30px;cursor:pointer;z-index:2001}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .header h1{font-size:18px}
+  .hotel-name{font-size:20px}
+  .room-prices{flex-direction:column;align-items:flex-start}
+  .price-brl{font-size:16px}
+  .summary-table th,.summary-table td{padding:8px 6px;font-size:11px}
+  .summary-table .price-col{font-size:13px}
+  .carousel{aspect-ratio:4/3}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Wanderlust</div>
+  <h1>Hotéis Ultra-Premium — Nova York</h1>
+  <div class="subtitle">Oscar Bressan Neto & Agda — 10 noites — 1 quarto</div>
+  <div class="dates">18 de Maio a 28 de Maio de 2026</div>
+</div>
+
+<!-- FAB NAV -->
+<div class="fab-nav">
+  <button class="fab-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Topo">&#8593;</button>
+  <button class="fab-btn" onclick="document.getElementById('summary').scrollIntoView({behavior:'smooth'})" title="Resumo">&#9776;</button>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- HOTELS -->
+<div class="hotel-section">
+
+  <!-- 1. MANDARIN ORIENTAL -->
+  <div class="hotel-card" id="mandarin">
+    <div class="hotel-header">
+      <div class="hotel-name">Mandarin Oriental</div>
+      <div class="hotel-location">Columbus Circle / Central Park — New York</div>
+      <span class="hotel-rating">4.6/5 Google</span>
+    </div>
+    <div class="carousel" data-carousel="mandarin">
+      <img src="images/mandarin_1.jpg" class="active" alt="Mandarin Oriental Room" onclick="openLightbox(this.src)">
+      <img src="images/mandarin_2.jpg" alt="Mandarin Oriental Room" onclick="openLightbox(this.src)">
+      <img src="images/mandarin_3.jpg" alt="Mandarin Oriental Room" onclick="openLightbox(this.src)">
+      <button class="carousel-btn prev" onclick="moveCarousel('mandarin',-1)">&lsaquo;</button>
+      <button class="carousel-btn next" onclick="moveCarousel('mandarin',1)">&rsaquo;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="goToSlide('mandarin',0)"></span>
+        <span class="carousel-dot" onclick="goToSlide('mandarin',1)"></span>
+        <span class="carousel-dot" onclick="goToSlide('mandarin',2)"></span>
+      </div>
+    </div>
+    <div class="rooms-container">
+      <div class="rooms-title">Opções de Quarto</div>
+      <div class="room-card">
+        <div class="room-label eco">Opção 1</div>
+        <div class="room-name">King Room</div>
+        <div class="room-size">37 m² / 400 sqft</div>
+        <div class="room-desc">Cama king, janelas do chão ao teto, vista cidade, banheiro em mármore</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 6.870</span>
+          <span class="price-brl"><span>R$</span> 39.502</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-label mid">Opção 2</div>
+        <div class="room-name">Premier Room</div>
+        <div class="room-size">40 m² / 425 sqft</div>
+        <div class="room-desc">Vista Central Park, cama king, decoração moderna com toques asiáticos</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 10.250</span>
+          <span class="price-brl"><span>R$</span> 58.938</span>
+        </div>
+      </div>
+      <div class="room-card highlight">
+        <div class="room-label top">Opção 3 — Premium</div>
+        <div class="room-name">Hudson River View Suite</div>
+        <div class="room-size">74 m² / 800 sqft</div>
+        <div class="room-desc">Suíte com sala separada, vista panorâmica Rio Hudson e skyline Manhattan, banheira de imersão</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 18.000</span>
+          <span class="price-brl"><span>R$</span> 103.500</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. THE PENINSULA -->
+  <div class="hotel-card" id="peninsula">
+    <div class="hotel-header">
+      <div class="hotel-name">The Peninsula</div>
+      <div class="hotel-location">Fifth Avenue & 55th Street — New York</div>
+      <span class="hotel-rating">9.7 Localização</span>
+    </div>
+    <div class="carousel" data-carousel="peninsula">
+      <img src="images/peninsula_1.jpg" class="active" alt="Peninsula Room" onclick="openLightbox(this.src)">
+      <img src="images/peninsula_2.jpg" alt="Peninsula Room" onclick="openLightbox(this.src)">
+      <img src="images/peninsula_3.jpg" alt="Peninsula Room" onclick="openLightbox(this.src)">
+      <button class="carousel-btn prev" onclick="moveCarousel('peninsula',-1)">&lsaquo;</button>
+      <button class="carousel-btn next" onclick="moveCarousel('peninsula',1)">&rsaquo;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="goToSlide('peninsula',0)"></span>
+        <span class="carousel-dot" onclick="goToSlide('peninsula',1)"></span>
+        <span class="carousel-dot" onclick="goToSlide('peninsula',2)"></span>
+      </div>
+    </div>
+    <div class="rooms-container">
+      <div class="rooms-title">Opções de Quarto</div>
+      <div class="room-card">
+        <div class="room-label eco">Opção 1</div>
+        <div class="room-name">Superior Room</div>
+        <div class="room-size">34 m² / 370 sqft</div>
+        <div class="room-desc">Quarto recém-renovado com acomodações de luxo, banheiro em mármore com TV integrada</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 8.950</span>
+          <span class="price-brl"><span>R$</span> 51.462</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-label mid">Opção 2</div>
+        <div class="room-name">Deluxe Room</div>
+        <div class="room-size">41 m² / 440 sqft</div>
+        <div class="room-desc">Mais espaçoso, vista interna ou externa, amenidades premium Peninsula</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 9.450</span>
+          <span class="price-brl"><span>R$</span> 54.338</span>
+        </div>
+      </div>
+      <div class="room-card highlight">
+        <div class="room-label top">Opção 3 — Premium</div>
+        <div class="room-name">Grand Luxe Room</div>
+        <div class="room-size">45 m² / 480 sqft</div>
+        <div class="room-desc">O maior quarto, janelas amplas com vista Fifth Avenue ou 55th St, TV 65", banheiro mármore</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 11.450</span>
+          <span class="price-brl"><span>R$</span> 65.838</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. THE RITZ-CARLTON -->
+  <div class="hotel-card" id="ritz">
+    <div class="hotel-header">
+      <div class="hotel-name">The Ritz-Carlton</div>
+      <div class="hotel-location">Central Park South — New York</div>
+      <span class="hotel-rating">4.6/5 Google</span>
+    </div>
+    <div class="carousel" data-carousel="ritz">
+      <img src="images/ritz_1.jpg" class="active" alt="Ritz-Carlton Room" onclick="openLightbox(this.src)">
+      <img src="images/ritz_2.jpg" alt="Ritz-Carlton Room" onclick="openLightbox(this.src)">
+      <img src="images/ritz_3.jpg" alt="Ritz-Carlton Room" onclick="openLightbox(this.src)">
+      <button class="carousel-btn prev" onclick="moveCarousel('ritz',-1)">&lsaquo;</button>
+      <button class="carousel-btn next" onclick="moveCarousel('ritz',1)">&rsaquo;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="goToSlide('ritz',0)"></span>
+        <span class="carousel-dot" onclick="goToSlide('ritz',1)"></span>
+        <span class="carousel-dot" onclick="goToSlide('ritz',2)"></span>
+      </div>
+    </div>
+    <div class="rooms-container">
+      <div class="rooms-title">Opções de Quarto</div>
+      <div class="room-card">
+        <div class="room-label eco">Opção 1</div>
+        <div class="room-name">Superior Interior View Room</div>
+        <div class="room-size">39 m² / 425 sqft</div>
+        <div class="room-desc">Vista pátio interno, cama king, padrão Ritz-Carlton</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 13.500</span>
+          <span class="price-brl"><span>R$</span> 77.625</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-label mid">Opção 2</div>
+        <div class="room-name">Avenue View Room</div>
+        <div class="room-size">42 m² / 450 sqft</div>
+        <div class="room-desc">Vista cidade/avenida, cama king, amenidades Ritz-Carlton</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 15.500</span>
+          <span class="price-brl"><span>R$</span> 89.125</span>
+        </div>
+      </div>
+      <div class="room-card highlight">
+        <div class="room-label top">Opção 3 — Premium</div>
+        <div class="room-name">Premiere Park View Suite</div>
+        <div class="room-size">102 m² / 1.100 sqft</div>
+        <div class="room-desc">Suíte espaçosa com vista panorâmica Central Park, sala de estar separada</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 25.000</span>
+          <span class="price-brl"><span>R$</span> 143.750</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. WALDORF ASTORIA -->
+  <div class="hotel-card" id="waldorf">
+    <div class="hotel-header">
+      <div class="hotel-name">Waldorf Astoria</div>
+      <div class="hotel-location">Park Avenue (recém-renovado) — New York</div>
+      <span class="hotel-rating">4.3/5 Google</span>
+    </div>
+    <div class="carousel" data-carousel="waldorf">
+      <img src="images/waldorf_1.jpg" class="active" alt="Waldorf Astoria Room" onclick="openLightbox(this.src)">
+      <img src="images/waldorf_2.jpg" alt="Waldorf Astoria Room" onclick="openLightbox(this.src)">
+      <img src="images/waldorf_3.jpg" alt="Waldorf Astoria Room" onclick="openLightbox(this.src)">
+      <button class="carousel-btn prev" onclick="moveCarousel('waldorf',-1)">&lsaquo;</button>
+      <button class="carousel-btn next" onclick="moveCarousel('waldorf',1)">&rsaquo;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="goToSlide('waldorf',0)"></span>
+        <span class="carousel-dot" onclick="goToSlide('waldorf',1)"></span>
+        <span class="carousel-dot" onclick="goToSlide('waldorf',2)"></span>
+      </div>
+    </div>
+    <div class="rooms-container">
+      <div class="rooms-title">Opções de Quarto</div>
+      <div class="room-card">
+        <div class="room-label eco">Opção 1</div>
+        <div class="room-name">Deluxe King Room</div>
+        <div class="room-size">53 m² / 575 sqft</div>
+        <div class="room-desc">Cama king, TV tela plana, frigobar, Wi-Fi, produtos de banho premium, roupão, cofre</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 14.360</span>
+          <span class="price-brl"><span>R$</span> 82.570</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-label mid">Opção 2</div>
+        <div class="room-name">Junior King Suite</div>
+        <div class="room-size">58 m² / 620 sqft</div>
+        <div class="room-desc">Suíte com banheira, área de estar, frigobar, cafeteira</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 15.119</span>
+          <span class="price-brl"><span>R$</span> 86.934</span>
+        </div>
+      </div>
+      <div class="room-card highlight">
+        <div class="room-label top">Opção 3 — Premium</div>
+        <div class="room-name">Junior Suite — Terrace View</div>
+        <div class="room-size">58 m² / 620 sqft</div>
+        <div class="room-desc">Suíte com terraço privativo, banheira, área de estar, vista cidade</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 15.877</span>
+          <span class="price-brl"><span>R$</span> 91.293</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. FOUR SEASONS -->
+  <div class="hotel-card" id="fourseasons">
+    <div class="hotel-header">
+      <div class="hotel-name">Four Seasons</div>
+      <div class="hotel-location">57th Street / Midtown — New York</div>
+      <span class="hotel-rating">4.6/5 Google</span>
+    </div>
+    <div class="carousel" data-carousel="fourseasons">
+      <img src="images/fourseasons_1.jpg" class="active" alt="Four Seasons Room" onclick="openLightbox(this.src)">
+      <img src="images/fourseasons_2.jpg" alt="Four Seasons Room" onclick="openLightbox(this.src)">
+      <img src="images/fourseasons_3.jpg" alt="Four Seasons Room" onclick="openLightbox(this.src)">
+      <button class="carousel-btn prev" onclick="moveCarousel('fourseasons',-1)">&lsaquo;</button>
+      <button class="carousel-btn next" onclick="moveCarousel('fourseasons',1)">&rsaquo;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active" onclick="goToSlide('fourseasons',0)"></span>
+        <span class="carousel-dot" onclick="goToSlide('fourseasons',1)"></span>
+        <span class="carousel-dot" onclick="goToSlide('fourseasons',2)"></span>
+      </div>
+    </div>
+    <div class="rooms-container">
+      <div class="rooms-title">Opções de Quarto</div>
+      <div class="room-card">
+        <div class="room-label eco">Opção 1</div>
+        <div class="room-name">Jr. Suite City View</div>
+        <div class="room-size">46 m² / 500 sqft</div>
+        <div class="room-desc">Vista cidade, cama king, padrão Four Seasons</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 18.070</span>
+          <span class="price-brl"><span>R$</span> 103.902</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <div class="room-label mid">Opção 2</div>
+        <div class="room-name">Jr. Suite Central Park View</div>
+        <div class="room-size">46 m² / 500 sqft</div>
+        <div class="room-desc">Vista parcial Central Park, cama king, Four Seasons</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 20.330</span>
+          <span class="price-brl"><span>R$</span> 116.898</span>
+        </div>
+      </div>
+      <div class="room-card highlight">
+        <div class="room-label top">Opção 3 — Premium</div>
+        <div class="room-name">Central Park Suite</div>
+        <div class="room-size">65 m² / 700 sqft</div>
+        <div class="room-desc">Suíte com vista Central Park, sala de estar separada, banheiro espaçoso</div>
+        <div class="room-prices">
+          <span class="price-usd">USD 35.010</span>
+          <span class="price-brl"><span>R$</span> 201.308</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-section" id="summary">
+  <div class="summary-card">
+    <div class="summary-title">Resumo Comparativo — Quarto Base de Cada Hotel</div>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Hotel</th>
+          <th>Quarto Base</th>
+          <th style="text-align:right">USD</th>
+          <th style="text-align:right">Total BRL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td class="hotel-col">Mandarin Oriental</td>
+          <td>King Room (37 m²)</td>
+          <td class="usd-col">USD 6.870</td>
+          <td class="price-col">R$ 39.502</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td class="hotel-col">The Peninsula</td>
+          <td>Superior Room (34 m²)</td>
+          <td class="usd-col">USD 8.950</td>
+          <td class="price-col">R$ 51.462</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td class="hotel-col">The Ritz-Carlton</td>
+          <td>Superior Interior View (39 m²)</td>
+          <td class="usd-col">USD 13.500</td>
+          <td class="price-col">R$ 77.625</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td class="hotel-col">Waldorf Astoria</td>
+          <td>Deluxe King Room (53 m²)</td>
+          <td class="usd-col">USD 14.360</td>
+          <td class="price-col">R$ 82.570</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td class="hotel-col">Four Seasons</td>
+          <td>Jr. Suite City View (46 m²)</td>
+          <td class="usd-col">USD 18.070</td>
+          <td class="price-col">R$ 103.902</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  Câmbio estimado: USD 1 = R$ 5,75 &nbsp;|&nbsp; Preços pesquisados em 24/03/2026<br>
+  Valores sujeitos a variação cambial e disponibilidade &nbsp;|&nbsp; Proposta válida por 24h<br>
+  Apenas cotado — somente a emissão garante a reserva
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="brand">Wanderlust</div>
+</div>
+
+<script>
+// Carousel
+const carousels = {};
+document.querySelectorAll('[data-carousel]').forEach(el => {
+  const name = el.dataset.carousel;
+  carousels[name] = { current: 0, images: el.querySelectorAll('img'), dots: el.querySelectorAll('.carousel-dot') };
+});
+
+function showSlide(name, idx) {
+  const c = carousels[name];
+  c.images.forEach((img, i) => { img.classList.toggle('active', i === idx); });
+  c.dots.forEach((dot, i) => { dot.classList.toggle('active', i === idx); });
+  c.current = idx;
+}
+
+function moveCarousel(name, dir) {
+  const c = carousels[name];
+  let next = c.current + dir;
+  if (next < 0) next = c.images.length - 1;
+  if (next >= c.images.length) next = 0;
+  showSlide(name, next);
+}
+
+function goToSlide(name, idx) { showSlide(name, idx); }
+
+// Auto-play
+Object.keys(carousels).forEach(name => {
+  setInterval(() => moveCarousel(name, 1), 5000 + Math.random() * 2000);
+});
+
+// Lightbox
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+}
+
+// Touch swipe
+document.querySelectorAll('.carousel').forEach(el => {
+  let startX;
+  el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+  el.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    const name = el.dataset.carousel;
+    if (Math.abs(diff) > 50) moveCarousel(name, diff > 0 ? 1 : -1);
+  });
+});
+</script>
+
+</body>
+</html>
